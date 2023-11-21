@@ -6,12 +6,9 @@ namespace LionKing.Components.Buttons;
 
 public class MenuButton : Component
 {
-    private MouseState _currentMouseState;
     private SpriteFont _font;
     private bool _isHovering;
-    private MouseState _previousMouseState;
     public bool IsClicked = false;
-    public bool WasClicked = false;
     private Rectangle _rectangle;
     private Color _idleColor;
     private Color _clickedColor;
@@ -61,7 +58,11 @@ public class MenuButton : Component
         {
             IsClicked = true;
         }
-    
+        else
+        {
+            IsClicked = false;
+        }
+
 
     }
 }

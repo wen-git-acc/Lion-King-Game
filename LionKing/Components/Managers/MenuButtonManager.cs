@@ -1,14 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LionKing.Components.Buttons;
 using LionKing.GameStateConfig;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace LionKing.Components.Managers
 {
@@ -22,6 +15,7 @@ namespace LionKing.Components.Managers
         public ExitButton ExitButton;
         public MenuButton MenuButton;
         public ResumeButton ResumeButton;
+        public RestartButton RestartButton;
 
         private readonly int _buttonBoxWidth = 250;
         private readonly int _buttonBoxHeight = 100;
@@ -90,6 +84,14 @@ namespace LionKing.Components.Managers
                 _buttonHoverColor
                 , _font);
 
+            RestartButton = new RestartButton(_spriteBatch
+                , _graphicsDevice
+                , new Rectangle(buttonX, buttonStartingY, _buttonBoxWidth, _buttonBoxHeight)
+                , _buttonIdleColor,
+                _buttonClickedColor,
+                _buttonHoverColor
+                , _font);
+
         }
 
         public void Update(GameTime gameTime)
@@ -97,16 +99,11 @@ namespace LionKing.Components.Managers
               StartButton.Update();
               ExitButton.Update();
               MenuButton.Update();
+              ResumeButton.Update();
+              RestartButton.Update();
 
-              if (StartButton.IsClicked)
-              {
-                  _gameState.IsMenuOpen = false;
-                  _gameState.IsGameStart = true;
-                  _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                  StartButton.IsClicked = false;
-              }
 
-              if (ResumeButton.IsClicked)
+              if (ResumeButton.IsClicked && _gameState.IsGameStart && !_gameState.IsGameEnd)
               {
                   _gameState.IsMenuOpen = false;
                   _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
@@ -120,11 +117,38 @@ namespace LionKing.Components.Managers
                   MenuButton.IsClicked = false;
               }
 
+              if (RestartButton.IsClicked && _gameState.IsGameEnd)
+              {
+                  _gameState.IsGameRestart = true;
+                  _gameState.IsGameStart = true;
+                  _gameState.IsMenuOpen = false;
+                  RestartButton.IsClicked = false;
+              }
+
+              if (StartButton.IsClicked && !_gameState.IsGameStart)
+              {
+                  _gameState.IsMenuOpen = false;
+                  _gameState.IsGameStart = true;
+                  _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
+                  StartButton.IsClicked = false;
+              }
+              ResumeButton.IsClicked = false;
+              MenuButton.IsClicked = false;
+              RestartButton.IsClicked = false;
+              StartButton.IsClicked = false;
+
+
         }
 
         public void Draw()
         {
-            if (_gameState.IsMenuOpen)
+            if (_gameState.IsGameEnd)
+            {
+                RestartButton.Draw();
+                ExitButton.Draw();
+            }
+
+            if (_gameState.IsMenuOpen && !_gameState.IsGameEnd)
             {
                 if (!_gameState.IsGameStart)
                 {

@@ -6,10 +6,8 @@ namespace LionKing.Components.Buttons;
 
 public class StartButton : Component
 {
-    private MouseState _currentMouseState;
     private SpriteFont _font;
     private bool _isHovering;
-    private MouseState _previousMouseState;
     public bool IsClicked = false;
     public bool WasClicked = false;
     private Rectangle _rectangle;
@@ -61,6 +59,10 @@ public class StartButton : Component
         if (_isHovering && mouseState.LeftButton == ButtonState.Pressed)
         {
             IsClicked = true;
+        }
+        else
+        {
+            IsClicked = false;
         }
 
 

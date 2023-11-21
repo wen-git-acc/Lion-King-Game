@@ -18,15 +18,10 @@ public class Game1 : Microsoft.Xna.Framework.Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private SpriteFont font;
-    private int score = 0;
 
     private const double FrameRate = 60;
 
-    private Simba Simba { get; set; }
-    private Scar Scar { get; set; }
-    private CharacterDrawer characterDrawer { get; set; }
     private RunSimbaGame _runSimbaGame {get; set; }
-    private StartButton startButton { get; set; }
 
     private MenuButtonManager menuButtonManager { get; set; }
 
@@ -55,10 +50,9 @@ public class Game1 : Microsoft.Xna.Framework.Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        // TODO: use this.Content to load your game content here
+
         font = Content.Load<SpriteFont>("ButtonFont");
-        Simba = new Simba(GraphicsDevice);
-        Scar = new Scar(GraphicsDevice);
+
         gameState = new GameState
         {
             SimbaStartingPosX = 0,
@@ -77,7 +71,6 @@ public class Game1 : Microsoft.Xna.Framework.Game
             }
 
         };
-        //characterDrawer = new CharacterDrawer(_spriteBatch, GraphicsDevice);
         _runSimbaGame = new RunSimbaGame(_spriteBatch, GraphicsDevice, gameState, font);
         _runSimbaGame.SetInitialCharacterPositionSize();
         menuButtonManager = new MenuButtonManager(_spriteBatch, GraphicsDevice, gameState, font,
@@ -90,12 +83,10 @@ public class Game1 : Microsoft.Xna.Framework.Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape) || menuButtonManager.ExitButton.IsClicked)
             Exit();
-        
-        // TODO: Add your update logic here
-        var xDiff = (int)Math.Min(100 * (gameTime.TotalGameTime.TotalSeconds + 1), 800);
-        //Simba.Position = new Vector2(xDiff, 0);
-        //Scar.Position = new Vector2(xDiff, 500);
-        //characterDrawer.Update();
+        if (gameState.IsGameRestart && gameState.IsGameEnd)
+        {
+            LoadContent();
+        }
         _runSimbaGame.Update(gameTime);
         menuButtonManager.Update(gameTime);
         base.Update(gameTime);
@@ -105,13 +96,7 @@ public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDevice.Clear(Color.White);
 
-        // TODO: Add your drawing code here
         _spriteBatch.Begin();
-        //_spriteBatch.DrawString(font, "Score", new Vector2(0, 100), Color.Black);
-
-        //_spriteBatch.Draw(Simba.Sprite, Simba.Position, Color.White);
-        //_spriteBatch.Draw(Scar.Sprite, Scar.Position, Color.White);
-        //characterDrawer.Draw();
         _runSimbaGame.Draw();
         menuButtonManager.Draw();
         _spriteBatch.End();

@@ -5,8 +5,7 @@ public class GameState
     public bool IsMenuOpen = true;
     public bool IsGameStart = false;
     public bool IsGameEnd = false;
-    public bool IsCaught = false;
-
+    public bool IsGameRestart = false;
 
     public int SimbaStartingPosX { get; set; }
     public int SimbaStartingPosY { get; set; }

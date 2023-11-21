@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LionKing.Components.Buttons;
 
-public class ExitButton : Component
+public class RestartButton : Component
 {
     private SpriteFont _font;
     private bool _isHovering;
@@ -17,11 +17,11 @@ public class ExitButton : Component
     private Texture2D _pixel;
     private GraphicsDevice _graphicsDevice;
     private Color buttonColor;
-    private string _buttonText = "Exit";
+    private string _buttonText = "Restart";
     private Color _hoverColor;
 
 
-    public ExitButton(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle rectangle, Color idleColor, Color clickedColor, Color hoverColor, SpriteFont font)
+    public RestartButton(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle rectangle, Color idleColor, Color clickedColor, Color hoverColor, SpriteFont font)
     {
         _rectangle = rectangle;
         _idleColor = idleColor;
@@ -63,6 +63,7 @@ public class ExitButton : Component
         {
             IsClicked = false;
         }
+
 
     }
 }
