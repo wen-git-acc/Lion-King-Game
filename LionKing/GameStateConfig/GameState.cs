@@ -18,6 +18,7 @@ public class GameState
     public BoundaryConfig playgroundBoundaryY { get; set; }
 
     public double RecordedStartTime = 0;
+    public double PauseTime = 0;
     public double TimerSeconds = 0;
 
 }

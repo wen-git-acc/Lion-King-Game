@@ -31,11 +31,22 @@ public class RunSimbaGame
 
     public virtual void Update(GameTime gameTime)
     {
+        if (!_gameState.IsGameStart || _gameState.IsMenuOpen)
+        {
+            return;
+        }
+
+        UpdateTimer(gameTime);
         var currentKeyboardState = Keyboard.GetState();
         if (currentKeyboardState.GetPressedKeyCount() > 0)
         {
             SimbaNewPosition(currentKeyboardState);
         }
+
+        //if (_gameState.IsGameStart && !_gameState.IsMenuOpen)
+        //{
+        //    UpdateTimer(gameTime);
+        //}
 
         //if (currentKeyboardState.IsKeyDown(Keys.Down))
         //{
@@ -72,7 +83,10 @@ public class RunSimbaGame
     }
 
 
-
+    public void UpdateTimer(GameTime gameTime)
+    {
+        _gameState.TimerSeconds = _gameState.PauseTime + (gameTime.TotalGameTime.TotalSeconds - _gameState.RecordedStartTime);
+    }
     
 
     public void SimbaNewPosition(KeyboardState keyboardState)

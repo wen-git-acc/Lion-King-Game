@@ -109,12 +109,14 @@ namespace LionKing.Components.Managers
               if (ResumeButton.IsClicked)
               {
                   _gameState.IsMenuOpen = false;
+                  _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
                   ResumeButton.IsClicked = false;
               }
 
               if (MenuButton.IsClicked)
               {
                   _gameState.IsMenuOpen = true;
+                  _gameState.PauseTime = _gameState.TimerSeconds;
                   MenuButton.IsClicked = false;
               }
 
