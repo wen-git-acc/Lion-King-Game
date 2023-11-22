@@ -218,8 +218,6 @@ public class RunSimbaGame
         foreach (var hunter in _hunters)
         {
             var overlap = Rectangle.Intersect(Simba.Rectangle, hunter.Hunter.Rectangle);
-            Debug.WriteLine(overlap.Width);
-            Debug.WriteLine(overlap.Height);
             if (!overlap.IsEmpty && overlap.Width >= 95 && overlap.Height >= 95)
             {
                 _gameState.IsGameEnd = true;

@@ -141,9 +141,12 @@ namespace LionKing.Components.Managers
                 _gameState.IsGameRestart = true;
                 _gameState.IsGameStart = true;
                 _gameState.IsMenuOpen = false;
+                _gameState.IsGameEnd = false;
+                _gameState.TimerSeconds = 0;
+                _gameState.PauseTime = 0;
+                _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
                 _gameState.IsOverlapButtonClicked = true;
                 RestartButton.IsVisible = false;
-                RestartButton.IsClicked = false;
             }
 
             if (StartButton.IsClicked)

@@ -84,9 +84,12 @@ public class Game1 : Microsoft.Xna.Framework.Game
             Keyboard.GetState().IsKeyDown(Keys.Escape) || menuButtonManager.ExitButton.IsClicked)
             Exit();
 
-        if (gameState.IsGameRestart && gameState.IsGameEnd)
+        if (menuButtonManager.RestartButton.IsClicked)
         {
-            LoadContent();
+            menuButtonManager.RestartButton.IsClicked = false;
+            _runSimbaGame = new RunSimbaGame(_spriteBatch, GraphicsDevice, gameState, font);
+            _runSimbaGame.SetInitialCharacterPositionSize();
+            //LoadContent();
         }
 
         _runSimbaGame.Update(gameTime);
