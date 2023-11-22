@@ -83,10 +83,12 @@ public class Game1 : Microsoft.Xna.Framework.Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape) || menuButtonManager.ExitButton.IsClicked)
             Exit();
+
         if (gameState.IsGameRestart && gameState.IsGameEnd)
         {
             LoadContent();
         }
+
         _runSimbaGame.Update(gameTime);
         menuButtonManager.Update(gameTime);
         base.Update(gameTime);

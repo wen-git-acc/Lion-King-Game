@@ -4,66 +4,26 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LionKing.Components.Buttons;
 
-public class RestartButton : Component
+public class RestartButton : ButtonComponent
 {
-    private SpriteFont _font;
-    private bool _isHovering;
-    public bool IsClicked = false;
-    public bool WasClicked = false;
-    private Rectangle _rectangle;
-    private Color _idleColor;
-    private Color _clickedColor;
-    private SpriteBatch _spriteBatch;
-    private Texture2D _pixel;
-    private GraphicsDevice _graphicsDevice;
-    private Color buttonColor;
-    private string _buttonText = "Restart";
-    private Color _hoverColor;
+    private const string buttonText = "Restart";
 
-
-    public RestartButton(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Rectangle rectangle, Color idleColor, Color clickedColor, Color hoverColor, SpriteFont font)
+    public RestartButton(SpriteBatch spriteBatch
+        , GraphicsDevice graphicsDevice
+        , Rectangle rectangle
+        , Color idleColor
+        , Color clickedColor
+        , Color hoverColor
+        , SpriteFont font
+        , bool isVisible) : base(spriteBatch
+        , graphicsDevice
+        , rectangle
+        , idleColor
+        , clickedColor
+        , hoverColor
+        , font
+        , isVisible
+        , buttonText)
     {
-        _rectangle = rectangle;
-        _idleColor = idleColor;
-        _hoverColor = hoverColor;
-        _clickedColor = clickedColor;
-        _spriteBatch = spriteBatch;
-        _graphicsDevice = graphicsDevice;
-        _font = font;
-        buttonColor = _idleColor;
-
-
-    }
-    public override void Draw()
-    {
-
-        _pixel = new Texture2D(_graphicsDevice, 1, 1);
-        _pixel.SetData(new[] { Color.White });
-        var measureTextSize = _font.MeasureString(_buttonText);
-        var textX = _rectangle.X + (_rectangle.Width - measureTextSize.X) / 2;
-        var textY = _rectangle.Y + (_rectangle.Height - measureTextSize.Y) / 2;
-
-        _spriteBatch.Draw(_pixel, _rectangle, buttonColor);
-        _spriteBatch.DrawString(_font, _buttonText, new Vector2(textX, textY), Color.Black);
-    }
-
-    public override void Update()
-    {
-        var mouseState = Mouse.GetState();
-        var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-
-        _isHovering = mouseRectangle.Intersects(_rectangle);
-        buttonColor = _isHovering ? _hoverColor : _idleColor;
-        if (_isHovering && mouseState.LeftButton == ButtonState.Pressed)
-        {
-            IsClicked = true;
-        }
-        else
-        {
-            IsClicked = false;
-        }
-
-
     }
 }

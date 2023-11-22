@@ -20,4 +20,7 @@ public class GameState
     public double PauseTime = 0;
     public double TimerSeconds = 0;
 
+    public bool IsOverlapButtonClicked = false;
+
+
 }

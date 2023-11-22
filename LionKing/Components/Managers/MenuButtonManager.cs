@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.Xna.Framework.Graphics;
 using LionKing.Components.Buttons;
 using LionKing.GameStateConfig;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace LionKing.Components.Managers
 {
@@ -58,7 +60,8 @@ namespace LionKing.Components.Managers
                 , _buttonIdleColor,
                 _buttonClickedColor,
                 _buttonHoverColor
-                , _font);
+                , _font
+                , true);
 
             ExitButton = new ExitButton(_spriteBatch
                 , _graphicsDevice
@@ -66,7 +69,8 @@ namespace LionKing.Components.Managers
                 , _buttonIdleColor,
                 _buttonClickedColor,
                 Color.Red
-                , _font);
+                , _font
+                , true);
 
             MenuButton = new MenuButton(_spriteBatch
                 , _graphicsDevice
@@ -74,7 +78,8 @@ namespace LionKing.Components.Managers
                 ,_buttonIdleColor
                 ,_buttonClickedColor
                 ,_buttonHoverColor
-                ,_font);
+                ,_font
+                , true);
 
             ResumeButton = new ResumeButton(_spriteBatch
                 , _graphicsDevice
@@ -82,7 +87,8 @@ namespace LionKing.Components.Managers
                 , _buttonIdleColor,
                 _buttonClickedColor,
                 _buttonHoverColor
-                , _font);
+                , _font
+                , false);
 
             RestartButton = new RestartButton(_spriteBatch
                 , _graphicsDevice
@@ -90,53 +96,66 @@ namespace LionKing.Components.Managers
                 , _buttonIdleColor,
                 _buttonClickedColor,
                 _buttonHoverColor
-                , _font);
+                , _font
+                , false);
 
         }
 
         public void Update(GameTime gameTime)
         {
-              StartButton.Update();
-              ExitButton.Update();
-              MenuButton.Update();
-              ResumeButton.Update();
-              RestartButton.Update();
 
+            ExitButton.Update();
+            MenuButton.Update();
 
-              if (ResumeButton.IsClicked && _gameState.IsGameStart && !_gameState.IsGameEnd)
-              {
-                  _gameState.IsMenuOpen = false;
-                  _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                  ResumeButton.IsClicked = false;
-              }
+            if (!_gameState.IsOverlapButtonClicked)
+            {
+                StartButton.Update();
+                ResumeButton.Update();
+                RestartButton.Update();
+            }
+            
+            if (_gameState.IsGameEnd)
+            {
+                ResumeButton.IsVisible = false;
+                RestartButton.IsVisible = true;
+            }
 
-              if (MenuButton.IsClicked)
-              {
-                  _gameState.IsMenuOpen = true;
-                  _gameState.PauseTime = _gameState.TimerSeconds;
-                  MenuButton.IsClicked = false;
-              }
+            if (ResumeButton.IsClicked)
+            {
+                _gameState.IsMenuOpen = false;
+                _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
+                _gameState.IsOverlapButtonClicked = true;
+                ResumeButton.IsClicked = false;
+            }
 
-              if (RestartButton.IsClicked && _gameState.IsGameEnd)
-              {
-                  _gameState.IsGameRestart = true;
-                  _gameState.IsGameStart = true;
-                  _gameState.IsMenuOpen = false;
-                  RestartButton.IsClicked = false;
-              }
+            if (MenuButton.IsClicked)
+            { 
+               _gameState.IsMenuOpen = true;
+               _gameState.PauseTime = _gameState.TimerSeconds;
+               _gameState.IsOverlapButtonClicked = false;
+                MenuButton.IsClicked = false;
+            }
 
-              if (StartButton.IsClicked && !_gameState.IsGameStart)
-              {
-                  _gameState.IsMenuOpen = false;
-                  _gameState.IsGameStart = true;
-                  _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                  StartButton.IsClicked = false;
-              }
-              ResumeButton.IsClicked = false;
-              MenuButton.IsClicked = false;
-              RestartButton.IsClicked = false;
-              StartButton.IsClicked = false;
+            if (RestartButton.IsClicked)
+            {
+                _gameState.IsGameRestart = true;
+                _gameState.IsGameStart = true;
+                _gameState.IsMenuOpen = false;
+                _gameState.IsOverlapButtonClicked = true;
+                RestartButton.IsVisible = false;
+                RestartButton.IsClicked = false;
+            }
 
+            if (StartButton.IsClicked)
+            {
+                _gameState.IsMenuOpen = false;
+                _gameState.IsGameStart = true;
+                _gameState.RecordedStartTime = gameTime.TotalGameTime.TotalSeconds;
+                _gameState.IsOverlapButtonClicked = true;
+                ResumeButton.IsVisible = true;
+                StartButton.IsVisible = false;
+                StartButton.IsClicked = false;
+            }
 
         }
 
@@ -146,9 +165,10 @@ namespace LionKing.Components.Managers
             {
                 RestartButton.Draw();
                 ExitButton.Draw();
+                return;
             }
 
-            if (_gameState.IsMenuOpen && !_gameState.IsGameEnd)
+            if (_gameState.IsMenuOpen)
             {
                 if (!_gameState.IsGameStart)
                 {

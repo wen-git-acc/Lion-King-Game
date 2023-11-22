@@ -20,8 +20,6 @@ public class RunSimbaGame
     public Pumbaa Pumbaa;
     public Mufasa Mufasa;
     private List<HuntersConfig> _hunters = new();
-    public int y = 100;
-    private readonly double _totalGameTimeSecond = 100;
     private Color _timerColor = Color.Black;
     private int _secondStageTime = 5;
     private int _finalStageTime = 10;
@@ -88,10 +86,7 @@ public class RunSimbaGame
             , _gameState.HunterStartingPosY - 150
             , 150
             , 150);
-        Pumbaa.Sizing(_gameState.HunterStartingPosX - 150
-            , _gameState.HunterStartingPosY - 150
-            , 150
-            , 150);
+
         Mufasa.Sizing(_gameState.HunterStartingPosX - 150
             , _gameState.HunterStartingPosY - 150
             , 150
@@ -102,11 +97,7 @@ public class RunSimbaGame
             Hunter = Scar,
             IsDeploy = true,
         });
-        _hunters.Add(new HuntersConfig
-        {
-            Hunter = Pumbaa,
-            IsDeploy = false,
-        });
+
         _hunters.Add(new HuntersConfig
         {
             Hunter = Mufasa, 
@@ -124,7 +115,7 @@ public class RunSimbaGame
 
         var time = _gameState.TimerSeconds;
 
-        if (_hunters.Count <= 1 || _hunters.Count != 3)
+        if (_hunters.Count <= 1 || _hunters.Count != 2)
         {
             return;
         }
@@ -133,11 +124,6 @@ public class RunSimbaGame
         {
             _hunters[1].IsDeploy = true;
         }  
-        
-        if (time > _finalStageTime)
-        {
-            _hunters[2].IsDeploy = true;
-        }
     }
 
     public void UpdateSimbaNewPosition(KeyboardState keyboardState)
@@ -199,6 +185,7 @@ public class RunSimbaGame
         var newPosX = hunterCurrentPosX + ((int)Math.Round(direction.X) * currentSpeed);
         var newPosY = hunterCurrentPosY + ((int)Math.Round(direction.Y) * currentSpeed);
 
+
         if (IsCharacterWithinBound(newPosX, newPosY, hunterWidth, hunterHeight))
             hunter.ChangePosition(newPosX, newPosY);
     }
@@ -233,10 +220,11 @@ public class RunSimbaGame
             var overlap = Rectangle.Intersect(Simba.Rectangle, hunter.Hunter.Rectangle);
             Debug.WriteLine(overlap.Width);
             Debug.WriteLine(overlap.Height);
-            if (!overlap.IsEmpty && overlap.Width >= 100 && overlap.Height >= 100)
+            if (!overlap.IsEmpty && overlap.Width >= 95 && overlap.Height >= 95)
             {
                 _gameState.IsGameEnd = true;
                 _gameState.IsMenuOpen = true;
+                _gameState.IsOverlapButtonClicked = false;
             }
         }
 
